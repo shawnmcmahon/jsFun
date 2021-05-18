@@ -27,7 +27,7 @@ const kittyPrompts = {
 
     // Return an array of just the names of kitties who are orange e.g.
     // ['Tiger', 'Snickers']
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.filter(kitty => kitty.color === 'orange').map(kitty => kitty.name)
     return result;
 
     // Annotation:
@@ -37,7 +37,7 @@ const kittyPrompts = {
   sortByAge() {
     // Sort the kitties by their age
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.sort((a, b) => {return b.age - a.age});
     return result;
 
     // Annotation:
@@ -58,7 +58,11 @@ const kittyPrompts = {
     // },
     // ...etc]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.sort((a, b) => b.age - a.age).map(kitty =>  {
+
+      kitty.age += 2
+      return kitty
+    })
     return result;
   }
 };
@@ -90,13 +94,24 @@ const clubPrompts = {
     //   ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = clubs.reduce((list, club) => {
+      club.members.forEach(member => {
+        if(!list[member]) {
+          list[member] = [];
+        }
+        list[member].push(club.club)
+
+      })
+        return list
+
+    }, {});
+    console.log('the result', result)
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
   }
-};
+
+}
 
 
 
@@ -412,11 +427,24 @@ const nationalParksPrompts = {
     //   parksVisited: ["Rocky Mountain", "Acadia", "Zion"]
     //}
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = nationalParks.reduce((acc, park) => {
+
+      if(park.visited) {
+        acc.parksVisited.push(park.name);
+      } else {
+        acc.parksToVisit.push(park.name);
+      }
+
+      return acc
+    }, {
+        parksToVisit: [],
+        parksVisited: []
+    });
+    console.log(result);
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Reduce.
   },
 
   getParkInEachState() {
@@ -429,12 +457,28 @@ const nationalParksPrompts = {
     // { Florida: 'Everglades' } ]
 
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+
+
+
+// **** Question for mentor ****
+
+
+
+    const result = nationalParks.reduce((acc, park) => {
+      const obj = park[location] = park.name
+      acc.push(obj)
+
+      console.log(acc)
+      return acc
+    }, []);
+    console.log(result)
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // reduce into an obj
   },
+
+
 
   getParkActivities() {
     // Return an array of all the activities I can do
@@ -452,7 +496,16 @@ const nationalParksPrompts = {
     //   'backpacking',
     //   'rock climbing' ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = nationalParks.reduce((activities, park) => {
+      park.activities.forEach((activity, index) => {
+        if(!activities.includes(activity)) {
+          activities.push(activity)
+        }
+      })
+
+      return activities
+    }, []);
+    console.log('le result', result);
     return result;
 
     // Annotation:
@@ -479,7 +532,15 @@ const breweryPrompts = {
     // Return the total beer count of all beers for every brewery e.g.
     // 40
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = breweries.reduce((total, brewery) => {
+      brewery.beers.forEach((beer, index) => {
+        total++
+      })
+
+
+      return total
+    }, 0);
+    console.log(result)
     return result;
 
     // Annotation:
@@ -495,23 +556,56 @@ const breweryPrompts = {
     // ...etc.
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = breweries.reduce((count, brewery) => {
+      name = brewery.name;
+      beerCount = 0;
+      obj = {};
+
+      brewery.beers.forEach((beer, index) => {
+        beerCount++;
+      })
+
+      obj = {name, beerCount}
+      count.push(obj);
+
+
+      return count
+    }, []);
+    console.log(result)
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Reduce. Premake the acc.
   },
 
   findHighestAbvBeer() {
     // Return the beer which has the highest ABV of all beers
     // e.g.
     // { name: 'Barrel Aged Nature\'s Sweater', type: 'Barley Wine', abv: 10.9, ibu: 40 }
+    let abv = 0;
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = breweries.reduce((highest, brewery) => {
+      let name, type, ibu;
+
+
+      brewery.beers.forEach((beer, index) => {
+        if(beer.abv > abv) {
+          name = beer.name;
+          type = beer.type;
+          abv = beer.abv;
+          ibu = beer.ibu;
+        }
+        highest = {name, type, abv, ibu};
+      })
+
+
+      return highest;
+    }, {});
+    console.log(result);
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Reduce. forEach
   }
 };
 
@@ -555,11 +649,27 @@ const turingPrompts = {
     //  { name: 'Robbie', studentCount: 18 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = instructors.reduce((total, instructor) => {
+      let name, studentCount;
+      let obj = {};
+
+      cohorts.forEach((cohort, index) => {
+        if(instructor.module === cohort.module) {
+          name = instructor.name
+          studentCount = cohort.studentCount
+          obj = {name, studentCount};
+          total.push(obj);
+        }
+
+      })
+
+      //console.log('le total', total)
+      return total
+    }, []);
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // reduce, forEach
   },
 
   studentsPerInstructor() {
@@ -569,11 +679,36 @@ const turingPrompts = {
     // cohort1804: 10.5
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+
+
+//**** QUESTION FOR MENTOR **********//
+
+
+
+
+
+
+
+    // const result = instructors.reduce((average, instructor) => {
+    //   cohorts.forEach((cohort, index) => {
+    //     if()
+    //
+    //     }
+    //   })
+    //
+    //
+    //     return average
+    // }, {
+    //   cohort1806: 0,
+    //   cohort1804: 0,
+    //   cohort1803: 0,
+    //   cohort1801: 0
+    //
+    // });
+    // return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Reduce. Add up how many instructors each cohort has. Divide by the number of students in the same cohort.
   },
 
   modulesPerTeacher() {
