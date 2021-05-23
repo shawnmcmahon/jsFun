@@ -27,7 +27,7 @@ const kittyPrompts = {
 
     // Return an array of just the names of kitties who are orange e.g.
     // ['Tiger', 'Snickers']
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.filter(kitty => kitty.color === 'orange').map(kitty => kitty.name)
     return result;
 
     // Annotation:
@@ -37,7 +37,7 @@ const kittyPrompts = {
   sortByAge() {
     // Sort the kitties by their age
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.sort((a, b) => {return b.age - a.age});
     return result;
 
     // Annotation:
@@ -58,7 +58,11 @@ const kittyPrompts = {
     // },
     // ...etc]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = kitties.sort((a, b) => b.age - a.age).map(kitty =>  {
+
+      kitty.age += 2
+      return kitty
+    })
     return result;
   }
 };
@@ -90,13 +94,24 @@ const clubPrompts = {
     //   ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = clubs.reduce((list, club) => {
+      club.members.forEach(member => {
+        if(!list[member]) {
+          list[member] = [];
+        }
+        list[member].push(club.club)
+
+      })
+        return list
+
+    }, {});
+    //console.log('the result', result)
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
   }
-};
+
+}
 
 
 
@@ -126,7 +141,17 @@ const modPrompts = {
     //   { mod: 4, studentsPerInstructor: 8 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = mods.reduce((array, course) => {
+      let obj = {};
+      let mod = course.mod
+      let studentsPerInstructor = course.students / course.instructors;
+      obj = {mod, studentsPerInstructor}
+      array.push(obj);
+
+
+      return array
+    }, [])
+    //console.log('the result', result)
     return result;
 
     // Annotation:
@@ -161,11 +186,24 @@ const cakePrompts = {
     //    ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.reduce((array, cake) => {
+      let flavor = cake.cakeFlavor;
+      let inStock = cake.inStock;
+
+      if(!array[cake]) {
+        let obj = {flavor, inStock};
+        array.push(obj);
+      }
+
+      return array
+    } , []);
+    //console.log('le result', result)
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Reduce through the cakes array, if the array does not include the cakeFlavor
+    // add the flavor
+    // add the inStock amount
   },
 
   onlyInStock() {
@@ -189,7 +227,7 @@ const cakePrompts = {
     // ..etc
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.filter(cake => cake.inStock > 0);
     return result;
 
     // Annotation:
@@ -200,7 +238,12 @@ const cakePrompts = {
     // Return the total amount of cakes in stock e.g.
     // 59
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.reduce((sum, cake) => {
+      sum += cake.inStock
+
+
+      return sum
+    }, 0);
     return result;
 
     // Annotation:
@@ -212,7 +255,17 @@ const cakePrompts = {
     // every cake in the dataset e.g.
     // ['dutch process cocoa', 'toasted sugar', 'smoked sea salt', 'berries', ..etc]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.reduce((allToppings, cake) => {
+
+      cake.toppings.forEach((topping) => {
+        if(!allToppings.includes(topping)) {
+          allToppings.push(topping)
+        }
+      })
+
+      return allToppings
+    }, []);
+    //console.log('list of toppings', result)
     return result;
 
     // Annotation:
@@ -230,7 +283,17 @@ const cakePrompts = {
     //    ...etc
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = cakes.reduce((list, cakes) => {
+      cakes.toppings.forEach(topping => {
+        if(!list[topping]) {
+          list[topping] = 0
+        }
+        list[topping]++
+      })
+
+      return list
+    }, {});
+    console.log('grocery list', result)
     return result;
 
     // Annotation:
@@ -355,11 +418,12 @@ const weatherPrompts = {
     // return an array of all the average temperatures. Eg:
     // [ 40, 40, 44.5, 43.5, 57, 35, 65.5, 62, 14, 46.5 ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = weather.map(city => (city.temperature.high + city.temperature.low) / 2 );
+    //console.log(result);
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    //
   },
 
   findSunnySpots() {
@@ -369,11 +433,14 @@ const weatherPrompts = {
     // 'New Orleans, Louisiana is sunny.',
     // 'Raleigh, North Carolina is mostly sunny.' ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = weather.filter(city => city.type === 'sunny' || city.type === 'mostly sunny').map(area => `${area.location} is ${area.type}.`);
+    console.log('le result', result)
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Filter through weather array to grab Sunny and Mostly Sunny cities
+    // For each city that fits this condition map through and create a string with
+    // `${city.location} is ${city.type}`
   },
 
   findHighestHumidity() {
@@ -412,11 +479,24 @@ const nationalParksPrompts = {
     //   parksVisited: ["Rocky Mountain", "Acadia", "Zion"]
     //}
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = nationalParks.reduce((acc, park) => {
+
+      if(park.visited) {
+        acc.parksVisited.push(park.name);
+      } else {
+        acc.parksToVisit.push(park.name);
+      }
+
+      return acc
+    }, {
+        parksToVisit: [],
+        parksVisited: []
+    });
+    console.log(result);
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Reduce.
   },
 
   getParkInEachState() {
@@ -429,12 +509,29 @@ const nationalParksPrompts = {
     // { Florida: 'Everglades' } ]
 
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+
+
+
+// **** Question for mentor ****
+
+
+
+    // const result = nationalParks.reduce((acc, park) => {
+    //   let obj = {}
+    //   obj = {park.name,}
+    //
+    //
+    //
+    //
+    // }, []);
+    // console.log(result)
+    // return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // reduce into an obj
   },
+
+
 
   getParkActivities() {
     // Return an array of all the activities I can do
@@ -452,7 +549,16 @@ const nationalParksPrompts = {
     //   'backpacking',
     //   'rock climbing' ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = nationalParks.reduce((activities, park) => {
+      park.activities.forEach((activity, index) => {
+        if(!activities.includes(activity)) {
+          activities.push(activity)
+        }
+      })
+
+      return activities
+    }, []);
+    console.log('le result', result);
     return result;
 
     // Annotation:
@@ -479,7 +585,15 @@ const breweryPrompts = {
     // Return the total beer count of all beers for every brewery e.g.
     // 40
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = breweries.reduce((total, brewery) => {
+      brewery.beers.forEach((beer, index) => {
+        total++
+      })
+
+
+      return total
+    }, 0);
+    console.log(result)
     return result;
 
     // Annotation:
@@ -495,23 +609,56 @@ const breweryPrompts = {
     // ...etc.
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = breweries.reduce((count, brewery) => {
+      name = brewery.name;
+      beerCount = 0;
+      obj = {};
+
+      brewery.beers.forEach((beer, index) => {
+        beerCount++;
+      })
+
+      obj = {name, beerCount}
+      count.push(obj);
+
+
+      return count
+    }, []);
+    console.log(result)
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Reduce. Premake the acc.
   },
 
   findHighestAbvBeer() {
     // Return the beer which has the highest ABV of all beers
     // e.g.
     // { name: 'Barrel Aged Nature\'s Sweater', type: 'Barley Wine', abv: 10.9, ibu: 40 }
+    let abv = 0;
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = breweries.reduce((highest, brewery) => {
+      let name, type, ibu;
+
+
+      brewery.beers.forEach((beer, index) => {
+        if(beer.abv > abv) {
+          name = beer.name;
+          type = beer.type;
+          abv = beer.abv;
+          ibu = beer.ibu;
+        }
+        highest = {name, type, abv, ibu};
+      })
+
+
+      return highest;
+    }, {});
+    console.log(result);
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Reduce. forEach
   }
 };
 
@@ -555,25 +702,61 @@ const turingPrompts = {
     //  { name: 'Robbie', studentCount: 18 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = instructors.reduce((total, instructor) => {
+      let name, studentCount;
+      let obj = {};
+
+      cohorts.forEach((cohort, index) => {
+        if(instructor.module === cohort.module) {
+          name = instructor.name
+          studentCount = cohort.studentCount
+          obj = {name, studentCount};
+          total.push(obj);
+        }
+
+      })
+
+      //console.log('le total', total)
+      return total
+    }, []);
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // reduce, forEach
   },
 
   studentsPerInstructor() {
     // Return an object of how many students per teacher there are in each cohort e.g.
-    // {
-    // cohort1806: 9,
-    // cohort1804: 10.5
+    //{
+    //   cohort1806: 15,
+    //   cohort1804: 7,
+    //   cohort1803: 10,
+    //   cohort1801: 9
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+
+
+//**** QUESTION FOR MENTOR **********//
+
+    const cohortAverages = cohorts.reduce((averagesByCohort, cohort) => {
+      const instructorsPerModule = instructors.filter(instructor => {
+        return instructor.module === cohort.module
+      }).length;
+      const cohortName = 'cohort' + cohort.cohort;
+      const studentTeacherRatio = cohort.studentCount / instructorsPerModule
+
+      averagesByCohort[cohortName] = studentTeacherRatio
+
+
+      return averagesByCohort
+    }, {});
+
+
+    console.log(cohortAverages)
+    return cohortAverages
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Reduce. Add up how many instructors each cohort has. Divide by the number of students in the same cohort.
   },
 
   modulesPerTeacher() {
@@ -591,11 +774,42 @@ const turingPrompts = {
     //     Will: [1, 2, 3, 4]
     //   }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = instructors.reduce((acc, currentInstructor) => {
+      //console.log('current instructor', currentInstructor)
+      console.log(currentInstructor.name)
+      acc[currentInstructor.name] = []
+      //  console.log(acc)
+
+      cohorts.forEach(cohort => {
+        cohort.curriculum.forEach(skill =>  {
+          if(currentInstructor.teaches.includes(skill) && !acc[currentInstructor.name].includes(cohort.module)) {
+            //push this corresponding module to the
+            //to the acc key of currentInstructor array
+            acc[currentInstructor.name].push(cohort.module)
+          }
+        })
+      })
+
+
+      console.log('acc', acc)
+
+      return acc
+    }, {});
     return result;
 
     // Annotation:
-    // Write your annotation here as a comment
+    // Goal: Return 1 object: Reduce.
+    // Iterate through the instructors array (reduce),
+    // Goal: Make a key of instructor.name
+        // If instructor.name is not included in the obj/acc
+        // !acc[instructor.name]
+        // then make a new entry with that instructor name as the key
+    // Goal: Assign a value of a blank array
+    // that match the instructor.teaches array
+        // and have the value be an empty array
+    // go into cohorts array, for each index in curriculum,
+    // if that string is included in the instructor.teachers
+    // push that cohort.module into the instructors array
   },
 
   curriculumPerTeacher() {
