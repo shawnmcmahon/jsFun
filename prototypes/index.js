@@ -328,7 +328,8 @@ const classPrompts = {
     //   { roomLetter: 'G', program: 'FE', capacity: 29 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classrooms.filter(classroom => classroom.program === 'FE');
+    console.log(result);
     return result;
 
     // Annotation:
@@ -343,7 +344,20 @@ const classPrompts = {
     //   beCapacity: 96
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classrooms.reduce((obj, currentClassroom) => {
+      if (currentClassroom.program === 'FE') {
+        obj['feCapacity'] += currentClassroom.capacity;
+      } else if (currentClassroom.program === 'BE') {
+        obj['beCapacity'] += currentClassroom.capacity;
+      }
+
+
+      return obj;
+    }, {
+      feCapacity: 0,
+      beCapacity: 0
+    });
+    //console.log(result)
     return result;
 
     // Annotation:
@@ -353,7 +367,8 @@ const classPrompts = {
   sortByCapacity() {
     // Return the array of classrooms sorted by their capacity (least capacity to greatest)
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = classrooms.sort((a, b) => {return a.capacity - b.capacity});
+    console.log(result);
     return result;
 
     // Annotation:
@@ -857,11 +872,44 @@ const bossPrompts = {
     //   { bossName: 'Scar', sidekickLoyalty: 16 }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    const upperCaseBossNames =  Object.keys(bosses).map((currentBoss) => bosses[currentBoss].name);
+    //console.log(upperCaseBossNames)
+    const sidekickLoyaltyPerBoss = upperCaseBossNames.reduce((acc, currentBoss) => {
+      // let bossName = currentBoss;
+      let sidekickLoyalty = 0;
+      sidekicks.forEach(currentSidekick => {
+        if (currentSidekick.boss === currentBoss) {
+          sidekickLoyalty += currentSidekick.loyaltyToBoss
+        }
+      })
+      // let obj = {bossName, sidekickLoyalty};
+      acc.push({bossName: currentBoss, sidekickLoyalty})
+
+      console.log('the acc', acc)
+      return acc
+
+    }, []);
+
+    return sidekickLoyaltyPerBoss;
 
     // Annotation:
     // Write your annotation here as a comment
+    // Object.keys(bosses) to retrieve an array of boss names
+    // Reduce the array of names check through the bosses object
+      // Push the bosses[currentBoss].name into acc
+      // This should return an almost identical array of names that are now
+          //uppercase
+    //Reduce through the uppercaseNamesArray
+    // Declare bossName to currentBoss
+    // decare sidekickLoyalty = 0;
+    // Reduce through the array of boss names
+    // For each through the sidekicks array
+        // if currentSidekick.boss === currentBoss
+        // sidekickLoyalty += currentSideKick.loyaltyToBoss
+    // Outside the forEach,
+    // Create a new obj = {bossName, sidekickLoyalty}
+    // acc.push(obj)
+
   }
 };
 
@@ -899,11 +947,53 @@ const astronomyPrompts = {
     //     color: 'red' }
     // ]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+
+
+    const starsInConstellations = stars.reduce((newArr, star) => {
+      const keyNames = Object.keys(constellations);
+      console.log('the key names', keyNames)
+      keyNames.forEach(name => {
+        if (constellations[name].stars.includes(star.name)) {
+          newArr.push(star)
+        }
+
+      })
+      return newArr;
+    }, [])
+
+    console.log(starsInConstellations)
+    return starsInConstellations
+    // Annotation:
+
+    // Iterate through the stars array and access each 'star' --> reduce
+    // Initilize accumulator as an empty array (Output)
+    // Assign keys in constellation dataset to new 'keyNames' array --> Object.keys()
+    // Iterate through key names and for each 'name', run conditional to check if it has current star name --> forEach
+    // In our conditional, access constellation element with that key name ---> constellation[name]
+    // check if its 'stars' property (array) includes the current star's 'name' (string)
+    // if truthy, push current element into access
+    // return acc
+
+
+
+
+    // const result = stars.reduce((arrayOfStars, currentStar) => {
+    //   console.log('constellation name', currentStar.constellation)
+    //   console.log('hello', constellations[currentStar.constellation]);
+    //   if (constellations[currentStar.constellation].stars.includes(currentStar.name)) {
+    //     arrayOfStars.push(currentStar)
+    //   }
+    //
+    //
+    //   return arrayOfStars
+    // }, []);
+    // return result;
 
     // Annotation:
     // Write your annotation here as a comment
+    // Reduce over the stars array
+    // if constellations[currentStar.constellation] = currentStar.constellation
+    // then push currentStar into the reduce accumulator
   },
 
   starsByColor() {
@@ -917,11 +1007,59 @@ const astronomyPrompts = {
     //   red: [{obj}]
     // }
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+// Is there a way to do this dynamically?
+  const result = stars.reduce((acc, star) => {
+    if (!acc[star.color]) {
+      acc[star.color] = []
+    }
+
+    acc[star.color].push(star)
+
+
+
+    return acc;
+  }, {})
+
+
+  console.log('le result', result)
+  return result;
+
+
+    // const result = stars.reduce((colorObj, star) => {
+    //   if (star.color === 'blue') {
+    //     colorObj['blue'].push(star)
+    //   } else if (star.color === 'white') {
+    //     colorObj['white'].push(star);
+    //   } else if (star.color === 'yellow') {
+    //     colorObj['yellow'].push(star);
+    //   } else if (star.color === 'orange') {
+    //     colorObj['orange'].push(star)
+    //   } else if (star.color === 'red') {
+    //     colorObj['red'].push(star)
+    //   }
+    //
+    //
+    //
+    //   return colorObj;
+    // }, {
+    //   blue: [],
+    //   white: [],
+    //   yellow: [],
+    //   orange: [],
+    //   red: []
+    //
+    // })
+    //
+    // console.log('the result', result);
+    // return result;
 
     // Annotation:
     // Write your annotation here as a comment
+    // Reduce through the stars array -- reduce
+    // Make the acc include blue, white, yellow, orange, and red
+    // check the color of the star
+    // if the color of the star matches a key in the acc
+    // then push that star to the array in the value of that color
   },
 
   constellationsStarsExistIn() {
@@ -970,11 +1108,27 @@ const ultimaPrompts = {
     // Return the sum of the amount of damage for all the weapons that our characters can use
     // Answer => 113
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = characters.reduce((acc, currentCharacter) => {
+      const weaponsDamage = currentCharacter.weapons.reduce((weaponAcc, currentWeapon) => {
+       weaponAcc += weapons[currentWeapon].damage
+
+        //console.log('weaponAcc', weaponAcc)
+        return weaponAcc
+      }, 0)
+
+        acc += weaponsDamage
+
+        return acc
+    } , 0);
     return result;
 
     // Annotation:
     // Write your annotation here as a comment
+    // Iterate in the characters array --> Reduce
+    // As I am reducing through each character's weapons array
+    // Use the weapon name to check the weapons object, to access that weapon
+    // If the names are the same, then add weapon.damage to the acc
+
   },
 
   charactersByTotal() {
@@ -982,11 +1136,37 @@ const ultimaPrompts = {
     // Return the sum damage and total range for each character as an object.
     // ex: [ { Avatar: { damage: 27, range: 24 }, { Iolo: {...}, ...}
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = characters.map(currentCharacter => {
+
+      let characterWeaponObj = currentCharacter.weapons.reduce((statsObj, currentWeapon) => {
+        statsObj.damage += weapons[currentWeapon].damage
+        statsObj.range += weapons[currentWeapon].range
+
+        //console.log('statsObj', statsObj)
+        return statsObj
+      }, {
+        damage: 0,
+        range: 0,
+      });
+      let obj = {[currentCharacter.name]: characterWeaponObj}
+      return obj;
+    });
+    console.log('le result', result)
     return result;
 
     // Annotation:
     // Write your annotation here as a comment
+    // Input: characters array
+    // Output: an array of objects, with the key being the character name
+    // and the value is an object with keys of either damager or ranges
+    // and the value of their totals
+    //
+    // Map through each character in the characters array ---> Map
+    // For each character, make a new object
+    // key: character.name
+    // value: {damage: totalDmg, range: totalRange)
+
+
   },
 };
 
@@ -1018,12 +1198,54 @@ const dinosaurPrompts = {
     //   'Jurassic World': 11,
     //   'Jurassic World: Fallen Kingdom': 18
     // }
+    //2nd try
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = movies.reduce((acc, currentMovie) => {
+      acc[currentMovie.title] = 0;
+      currentMovie.dinos.forEach(currentDino => {
+        if (dinosaurs[currentDino].isAwesome) {
+          acc[currentMovie.title]++
+        }
+      })
+
+      return acc
+    }, {});
+    console.log('the result', result)
     return result;
+
+
+    // 1st way
+
+    // const result = movies.reduce((acc, currentMovie) => {
+    //   const dinoCount = currentMovie.dinos.reduce((count, currentDino) => {
+    //     if (dinosaurs[currentDino].isAwesome) {
+    //       count++
+    //     }
+    //
+    //     //console.log('count', count);
+    //     return count
+    //   }, 0)
+    //     console.log('current movie', currentMovie.title)
+    //
+    //       //currentMovie.title
+    //       acc[currentMovie.title] = dinoCount
+    //
+    //   //  console.log(acc)
+    //   return acc
+    // }, {});
+    // return result;
 
     // Annotation:
     // Write your annotation here as a comment
+    // Iterate through the movies array --> reduce
+    // Iterate through each movie's dinos ---> reduce
+    // For each movie's dino, find the matching dinosaur in the dinosaurs object by
+    //    using the currentDino
+    // If Check the dinosaurs[currentDino].is awesome === true
+    //  then we add 1 to the accumulator for the current movie
+    // If 1st reduce acc does not include the current movie
+    //  then create the current movie with the value of amount of Awesome dino's
+    //  from the 2nd acc
   },
 
   averageAgePerMovie() {
@@ -1052,16 +1274,43 @@ const dinosaurPrompts = {
       }
     */
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = movies.reduce((acc, currentMovie) => {
+      if (!acc[currentMovie.director]) {
+        acc[currentMovie.director] = {[currentMovie.title]: 0}
+      } else {
+        acc[currentMovie.director][currentMovie.title] = 0
+      }
+
+      const totalAgeOfAllCast = currentMovie.cast.reduce((totalAge, currentCastMember) => {
+        totalAge += currentMovie.yearReleased - humans[currentCastMember].yearBorn
+
+        return totalAge
+      }, 0)
+      acc[currentMovie.director][currentMovie.title] = Math.floor(totalAgeOfAllCast / currentMovie.cast.length)
+      return acc
+    }, {})
     return result;
 
     // Annotation:
     // Write your annotation here as a comment
+    // iterate through the movies array --> reduce;
+    // if acc does not include currentMovie.director
+    //   then add acc[currentMovie.director] = {currentMovie.title = 0}
+    // if acc does include currentMovie.director.currentMovie.title
+    //  then add the currentMovie.title
+    // iterate through the currentMovie.cast ---> reduce
+    // if (humans[currentCastMember])
+    //  then let age = humans[currentCastMember.yearBorn] - currentMovie.yearReleased
+    // add that age to the ageAcc
+    // Once done iterating through all cast Members of the current movie
+    // divide ageAcc / currentMovie.cast.length
+
   },
 
   uncastActors() {
     /*
-    Return an array of objects that contain the names of humans who have not been cast in a Jurassic Park movie (yet), their nationality, and their imdbStarMeterRating. The object in the array should be sorted alphabetically by nationality.
+    Return an array of objects that contain the names of humans who have not been cast in a Jurassic Park movie (yet),
+    //their nationality, and their imdbStarMeterRating. The object in the array should be sorted alphabetically by nationality.
 
     e.g.
       [{
@@ -1083,13 +1332,79 @@ const dinosaurPrompts = {
         nationality: 'Martian',
         imdbStarMeterRating: 0
       }]
-    */
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+
+    */
+    // WRONG WAY
+
+
+    let castActors = movies.reduce((acc, curMovie) => {
+      curMovie.cast.forEach(member => {
+        if(!acc.includes(member)){
+          acc.push(member);
+        }
+      });
+      return acc;
+    }, []);
+    let humanNames = Object.keys(humans);
+    let result = humanNames.reduce((acc, curHuman) => {
+      if(!castActors.includes(curHuman)) {
+        let obj = {
+          name : curHuman,
+          nationality: humans[curHuman].nationality,
+          imdbStarMeterRating: humans[curHuman].imdbStarMeterRating,
+        };
+        acc.push(obj);
+      }
+      return acc;
+    }, []);
+    console.log(result);
+    //let sortedUncastActors =
+    result.sort((a,b) => a.nationality.localeCompare(b.nationality));
     return result;
+
+    
+    // const namesOfAllHumans = Object.keys(humans)
+    // const uncast = namesOfAllHumans.reduce((acc, currentHuman) => {
+    //   var name;
+    //   let obj;
+    //     movies.forEach(currentMovie => {
+    //       if (!currentMovie.cast.includes(currentHuman)) {
+    //         //console.log('current human', currentHuman)
+    //         name = currentHuman;
+    //         let nationality = humans[currentHuman].nationality
+    //         //console.log(humans[currentHuman].nationality)
+    //         let imdbStarMeterRating = humans[currentHuman].imdbStarMeterRating;
+    //         //console.log('current human imdb rating', humans[currentHuman].imdbStarMeterRating)
+    //         obj = {name, nationality, imdbStarMeterRating}
+    //         //console.log('needed obj', obj)
+    //       }
+    //     })
+    //     if (!acc.includes(obj)) {
+    //       acc.push(obj);
+    //     }
+    //
+    //
+    //
+    //   console.log('the acc', acc)
+    //     return acc
+    // }, [])
+    // //console.log('uncast', acc)
+    // const sortCast = uncast.sort((a, b) => a.nationality.localeComapre(b.nationality))
+    // return sortCast;
 
     // Annotation:
     // Write your annotation here as a comment
+    // Object.keys(humans) to retrieve all humans in the humans object
+    // Reduce through the human names array from above
+    // For each through the movies each, for each currentMovie.cast
+        // if (!currentMovie.cast.includes(currentHuman))
+          // Does it stop at the single movie? --- mental note
+          // let name = NotAppearInMovie = curentHuman
+    // let nationality = humans[currentHuman].nationality
+    // let imdbStarMeterRating = humans[currentHuman].imdbStarMeterRating
+    // let obj = {actor, nationality, imdbStarMeterRating}
+    // acc.push(obj)
   },
 
   actorsAgesInMovies() {
