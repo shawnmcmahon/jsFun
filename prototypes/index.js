@@ -1336,8 +1336,8 @@ const dinosaurPrompts = {
 
     */
     // WRONG WAY
-
-
+    //
+    //
     let castActors = movies.reduce((acc, curMovie) => {
       curMovie.cast.forEach(member => {
         if(!acc.includes(member)){
@@ -1358,12 +1358,15 @@ const dinosaurPrompts = {
       }
       return acc;
     }, []);
-    console.log(result);
     //let sortedUncastActors =
-    result.sort((a,b) => a.nationality.localeCompare(b.nationality));
+    result.sort((a,b) => {
+      console.log('a nationality', a.nationality)
+      console.log('b nationality', b.nationality)
+      return a.nationality - b.nationality});
+    // console.log(result);
     return result;
 
-    
+
     // const namesOfAllHumans = Object.keys(humans)
     // const uncast = namesOfAllHumans.reduce((acc, currentHuman) => {
     //   var name;
