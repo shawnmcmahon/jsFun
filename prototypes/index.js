@@ -395,11 +395,15 @@ const bookPrompts = {
     //   'Catch-22', 'Treasure Island']
 
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
+    const result = books.filter(currentBook => currentBook.genre !== 'Horror' && currentBook.genre !== 'True Crime').map(book => book.title);
+    // console.log('the result', result)
     return result;
 
     // Annotation:
     // Write your annotation here as a comment
+    // Filter through the books array to make a new array of all the books.
+    //      that are not horror or true crime
+    // Map through those books just to return the title
 
   },
   getNewBooks() {
@@ -410,11 +414,20 @@ const bookPrompts = {
     //  { title: 'Life of Pi', year: 2001 },
     //  { title: 'The Curious Incident of the Dog in the Night-Time', year: 2003 }]
 
-    const result = 'REPLACE WITH YOUR RESULT HERE';
-    return result;
+    const booksFromThe90sAnd00s = books.filter(currentBook => currentBook.published >= 1990 && currentBook.published < 2010)
+    const booksFromThePast = booksFromThe90sAnd00s.reduce((acc, currentBook) => {
+        let obj = {'title': currentBook.title, 'year': currentBook.published}
+        acc.push(obj)
+        return acc
+    }, [])
+    return booksFromThePast;
 
     // Annotation:
     // Write your annotation here as a comment
+    // Filter through the books array to make an array of all books that
+    //    were published between 1990 -2000
+    // Reduce through the new array of books to make an array of objects
+    //    where the objects includes the currentBook.title and the currentBook.published
   }
 
 };
@@ -748,6 +761,7 @@ const turingPrompts = {
     //   cohort1803: 10,
     //   cohort1801: 9
     // }
+    //
 
 
 
@@ -1359,12 +1373,13 @@ const dinosaurPrompts = {
       return acc;
     }, []);
     //let sortedUncastActors =
-    result.sort((a,b) => {
-      console.log('a nationality', a.nationality)
-      console.log('b nationality', b.nationality)
-      return a.nationality - b.nationality});
+    const newResult = result.sort((a,b) => {
+      // console.log('a nationality', a.nationality)
+      // console.log('b nationality', b.nationality)
+      {return a.nationality.localeCompare(b.nationality)}
+    });
     // console.log(result);
-    return result;
+    return newResult;
 
 
     // const namesOfAllHumans = Object.keys(humans)
