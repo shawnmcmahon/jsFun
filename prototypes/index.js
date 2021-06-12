@@ -393,8 +393,6 @@ const bookPrompts = {
     //   'The Handmaid\'s Tale', 'The Metamorphosis', 'Brave New World', 'Life of Pi',
     //   'The Curious Incident of the Dog in the Night - Time', 'The Bell Jar',
     //   'Catch-22', 'Treasure Island']
-
-
     const result = books.filter(currentBook => currentBook.genre !== 'Horror' && currentBook.genre !== 'True Crime').map(book => book.title);
     // console.log('the result', result)
     return result;
