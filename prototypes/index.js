@@ -270,8 +270,18 @@ const cakePrompts = {
     //    { flavor: 'yellow', inStock: 14 },
     //    ..etc
     // ]
+    let flavor, inStock;
+    const result = cakes.map(currentCake => {
+        let obj = {flavor: currentCake.cakeFlavor, inStock: currentCake.inStock}
+        return obj
+    })
+    // console.log('the result', result)
+    return result
 
-
+    //Map through the cakes array
+    //Inside the map, make a obj with the first key-value of the flavor
+    // and a second keyvalue of the in amount instock
+    // return that obj
 
 
 
@@ -322,9 +332,19 @@ const cakePrompts = {
     // },
     // ..etc
     // ]
+    //
 
-    const result = cakes.filter(cake => cake.inStock > 0);
+    const result = cakes.filter(currentCake => currentCake.inStock > 0)
     return result;
+
+
+
+
+
+
+
+    // const result = cakes.filter(cake => cake.inStock > 0);
+    // return result;
 
     // Annotation:
     // Write your annotation here as a comment
@@ -334,13 +354,32 @@ const cakePrompts = {
     // Return the total amount of cakes in stock e.g.
     // 59
 
-    const result = cakes.reduce((sum, cake) => {
-      sum += cake.inStock
+    const result = cakes.reduce((acc, currentCake) => {
+      acc += currentCake.inStock
+
+      return acc
+    }, 0)
+    // console.log('instock', result)
+    return result
 
 
-      return sum
-    }, 0);
-    return result;
+
+
+
+
+
+
+
+
+
+
+    // const result = cakes.reduce((sum, cake) => {
+    //   sum += cake.inStock
+    //
+    //
+    //   return sum
+    // }, 0);
+    // return result;
 
     // Annotation:
     // Write your annotation here as a comment
@@ -351,18 +390,45 @@ const cakePrompts = {
     // every cake in the dataset e.g.
     // ['dutch process cocoa', 'toasted sugar', 'smoked sea salt', 'berries', ..etc]
 
-    const result = cakes.reduce((allToppings, cake) => {
 
-      cake.toppings.forEach((topping) => {
-        if(!allToppings.includes(topping)) {
-          allToppings.push(topping)
-        }
-      })
 
-      return allToppings
-    }, []);
-    //console.log('list of toppings', result)
-    return result;
+  const result = cakes.reduce((acc, currentCake) => {
+
+    currentCake.toppings.forEach(topping => {
+      if (!acc.includes(topping)) {
+        acc.push(topping)
+      }
+
+    })
+
+
+
+    return acc
+  }, [])
+  console.log('all toppings', result)
+  return result;
+
+
+
+
+
+
+
+
+
+
+    // const result = cakes.reduce((allToppings, cake) => {
+    //
+    //   cake.toppings.forEach((topping) => {
+    //     if(!allToppings.includes(topping)) {
+    //       allToppings.push(topping)
+    //     }
+    //   })
+    //
+    //   return allToppings
+    // }, []);
+    // //console.log('list of toppings', result)
+    // return result;
 
     // Annotation:
     // Write your annotation here as a comment
